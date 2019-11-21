@@ -1,21 +1,33 @@
 package com.batval.threads.services;
 
-import com.batval.threads.restaurant.CashBox;
-import com.batval.threads.restaurant.Restaurant;
+import com.batval.threads.models.restaurant.*;
 
 public class RestaurantService {
 
-    //private Restaurant restaurant;
+    private Restaurant restaurant;
 
-    private void initializeRestaurant(Restaurant restaurant) {
-        for (int i = 0; i < restaurant.getNumberOfCashBoxes(); i++) {
-           restaurant.addCashBox(new CashBox(i + 1));
-        }
+    public RestaurantService( int numberCashBoxes){
+        this.restaurant = new Restaurant(numberCashBoxes);
     }
 
-    public CashBox useCashBox(Restaurant restaurant, int i) {
+
+//    private Restaurant restaurant;
+
+    private void initializeRestaurant() {
+        for (int i = 0; i < restaurant.getNumberOfCashBoxes(); i++) {
+
+            restaurant.addCashBox(new CashBox(i + 1));
+        }
+   }
+
+    public CashBox useCashBox( int i) {
         restaurant.getCashBox(i).getNumberOfClient().getAndIncrement();
-        return   restaurant.getCashBox(i);
+        return restaurant.getCashBox(i);
+    }
+
+
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
 
