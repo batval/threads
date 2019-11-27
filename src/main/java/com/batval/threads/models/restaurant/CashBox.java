@@ -1,6 +1,8 @@
 package com.batval.threads.models.restaurant;
 
 import com.batval.threads.models.client.Client;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -9,7 +11,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CashBox {
-
+    /** Event Logger */
+    private static final Logger logger = LoggerFactory.getLogger(CashBox.class);
     private int cashBoxId;
     private AtomicInteger numberOfClients = new AtomicInteger();
     private static AtomicInteger money = new AtomicInteger();
@@ -42,11 +45,11 @@ public class CashBox {
             takeMoney(50, client);
             TimeUnit.MILLISECONDS.sleep(new Random().nextInt(100));
             deliverOrder(client);
-            System.out.println("Total amount of money at CashBox #" + cashBoxId + " is "
+            logger.info("Total amount of money at CashBox #" + cashBoxId + " is "
                     + money + " USD");
             numberOfClients.getAndDecrement();
         } catch (InterruptedException exception) {
-            System.out.println("Error. A thread was interrupted!");
+            logger.error("Error. A thread was interrupted!");
         } finally {
             lock1.unlock();
             lock2.unlock();
@@ -60,18 +63,18 @@ public class CashBox {
     }
 
     private void acceptOrder(Client client) {
-        System.out.println("CashBox #" + cashBoxId + ": accepting order from Client #"
+        logger.info("CashBox #" + cashBoxId + ": accepting order from Client #"
                 + client.getIdClient());
     }
 
     private void takeMoney(int amount, Client client) {
-        System.out.println("CashBox #" + cashBoxId + ": taking " + amount
+        logger.info("CashBox #" + cashBoxId + ": taking " + amount
                 + " USD from Client #" + client.getIdClient());
         money.addAndGet(amount);
     }
 
     private void deliverOrder(Client client) {
-        System.out.println("CashBox #" + cashBoxId + ": delivering order to Client #"
+        logger.info("CashBox #" + cashBoxId + ": delivering order to Client #"
                 + client.getIdClient());
     }
 

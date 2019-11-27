@@ -3,6 +3,8 @@ package com.batval.threads.services;
 import com.batval.threads.models.client.Client;
 import com.batval.threads.models.comparator.NumberClientsCashBoxComparator;
 import com.batval.threads.models.restaurant.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 public class RestaurantService extends Thread {
 
-
+    /** Event Logger */
+    private static final Logger logger = LoggerFactory.getLogger(RestaurantService.class);
     private Restaurant restaurant;
     private Client client;
 
@@ -28,11 +31,11 @@ public class RestaurantService extends Thread {
         try {
             TimeUnit.MILLISECONDS.sleep(new Random().nextInt(20));
             cashBox = restaurant.useCashBox(new Random().nextInt(5));
-            System.out.println("Client #" + client.getIdClient() + " has chosen CashBox #"
+            logger.info("Client #" + client.getIdClient() + " has chosen CashBox #"
                     + cashBox.getCashBoxId());
             stayingInQueue(cashBox);
         } catch (InterruptedException exception) {
-            System.out.println("Error. A thread was interrupted!");
+            logger.error("Error. A thread was interrupted!");
         }
     }
 
@@ -40,6 +43,7 @@ public class RestaurantService extends Thread {
         if (cashBox.isCashBoxFree()) {
             occupyCashBox(cashBox);
         } else {
+           logger.info("Client #"+client.getIdClient()+" in the queue at the CashBox #"+cashBox.getCashBoxId());
             TimeUnit.MILLISECONDS.sleep(new Random().nextInt(50));
             int nextCashBoxkId = properCashBoxId();
             cashBox = moveToNextCashBox(cashBox, nextCashBoxkId);
@@ -56,14 +60,14 @@ public class RestaurantService extends Thread {
 
     private void occupyCashBox(CashBox cashBox) {
         cashBox.serviceClient(client);
-        System.out.println("Client #" + client.getIdClient() + ": leaving CashBox #"
+       logger.info("Client #" + client.getIdClient() + ": leaving CashBox #"
                 + cashBox.getCashBoxId());
     }
 
     private CashBox moveToNextCashBox(CashBox cashBox, int nextCashBoxId) {
         if (cashBox.getCashBoxId() != nextCashBoxId) {
             CashBox nextCashBox = restaurant.useCashBox(nextCashBoxId - 1);
-            System.out.println("Client #" + client.getIdClient() + ": moving to CashBox #"
+           logger.info("Client #" + client.getIdClient() + ": moving to CashBox #"
                     + nextCashBox.getCashBoxId());
             cashBox.getNumberOfClients().getAndDecrement();
             cashBox = nextCashBox;
