@@ -9,6 +9,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+
+/**
+ * Loading settings for a restaurant
+ *
+ * @version 1.0
+ * @autor Baturo Valery
+ */
 public class FileSettings {
 
     /**

@@ -1,7 +1,7 @@
 package com.batval.threads.services;
 
 import com.batval.threads.models.client.Client;
-import com.batval.threads.models.comparator.NumberClientsCashBoxComparator;
+import com.batval.threads.comparator.*;
 import com.batval.threads.models.restaurant.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

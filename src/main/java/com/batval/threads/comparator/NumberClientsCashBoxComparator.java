@@ -1,4 +1,4 @@
-package com.batval.threads.models.comparator;
+package com.batval.threads.comparator;
 
 import com.batval.threads.models.restaurant.CashBox;
 
